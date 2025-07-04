@@ -17,7 +17,7 @@ const SignUpPage = () => {
     await supabase.auth.signUp(data);
   };
 
-  return <SignUpForm />;
+  return <SignUpForm methods={methods} onSubmit={onSubmit} />;
 };
 
 export default SignUpPage;
