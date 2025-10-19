@@ -14,8 +14,34 @@ export const handlers = [
   }),
   // ユーザープロフィールの登録APIのモックハンドラ
   http.post("/api/profiles", async ({ request }) => {
-    const profile = await request.formData();
-    console.log(profile);
-    return new HttpResponse("Hello World!!", { status: 201 });
+    const formData = await request.formData();
+    const userId = formData.get("userId");
+    const userName = formData.get("userName");
+    const image = formData.get("image") as File;
+    const specialtyGenresStr = formData.get("specialtyGenres") as string;
+    const specialtyGenres = JSON.parse(specialtyGenresStr);
+
+    console.log("プロフィール登録リクエスト:", {
+      userId,
+      userName,
+      image,
+      specialtyGenres,
+    });
+
+    // モック用のS3のURLを生成
+    const imageUrl = image ? `https://mock-s3.example.com/avatars/${userId}/${image.name}` : "";
+
+    return HttpResponse.json(
+      {
+        message: "プロフィールが正常に登録されました",
+        profile: {
+          userId,
+          userName,
+          image: imageUrl,
+          specialtyGenres,
+        },
+      },
+      { status: 201 }
+    );
   }),
 ];

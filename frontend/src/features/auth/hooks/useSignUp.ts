@@ -1,8 +1,11 @@
 import { type SignUpSchema } from "@/features/auth/types";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export const useSignUp = () => {
   const supabase = createClient();
+  const router = useRouter();
+
   const signUp = async (input: SignUpSchema) => {
     try {
       // Supabaseに登録をする
@@ -34,7 +37,8 @@ export const useSignUp = () => {
       if (backendResponse.ok) {
         const result = await backendResponse.json();
         console.log("新規登録成功（Supabase & バックエンド）:", result);
-        alert("新規登録が完了しました");
+        // alert("新規登録が完了しました");
+        router.push("/profile");
       } else {
         const errorData = await backendResponse.json();
         console.error("バックエンド保存失敗:", errorData);
